@@ -17,7 +17,7 @@ function Home() {
 export default Home;*/
 function Home() {
   return (
-    <main className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center">
+    <main className="min-h-screen bg-slate-950 text-white flex flex-col">
       <Navbar />
       <Hero />
       <DownloadCard />
