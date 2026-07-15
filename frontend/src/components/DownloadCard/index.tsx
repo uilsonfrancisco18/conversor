@@ -1,14 +1,23 @@
-import { useState } from "react";
+
 
 import Input from "./Input";
 import TipoSelector from "./TipoSelector";
 import QualitySelector from "./QualitySelector";
 import Button from "./Button";
 import Status from "./Status";
+import { useDownload } from "../../hooks/useDownloadd";
 
 function DownloadCard() {
-  const [tipo, setTipo] = useState("video");
-  const [qualidade, setQualidade] = useState("");
+  const {
+  url,
+  setUrl,
+  tipo,
+  setTipo,
+  qualidade,
+  setQualidade,
+  loading,
+  handleDownload,
+} = useDownload();
 
   return (
     <section className="w-full px-6 pb-20">
@@ -16,12 +25,16 @@ function DownloadCard() {
 
         <div className="space-y-6">
 
-          <Input />
+          <Input
+            url={url}
+            setUrl={setUrl}
+          />
 
           <div className="grid gap-6 md:grid-cols-2">
             <TipoSelector
               tipo={tipo}
               setTipo={setTipo}
+              setQualidade={setQualidade}
             />
 
             <QualitySelector
@@ -31,7 +44,11 @@ function DownloadCard() {
             />
           </div>
 
-          <Button />
+          <Button
+           loading={loading}
+           onClick={handleDownload} 
+          
+          />
 
           <Status />
 

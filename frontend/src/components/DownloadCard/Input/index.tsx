@@ -1,9 +1,13 @@
 import { Link } from "lucide-react";
 
-function Input() {
+interface InputProps {
+  url: string;
+  setUrl: React.Dispatch<React.SetStateAction<string>>;
+}
+
+function Input({ url, setUrl }: InputProps) {
   return (
     <div className="space-y-3">
-
       <label className="flex items-center gap-2 text-sm font-medium text-slate-300">
         <Link size={18} className="text-blue-500" />
         URL do vídeo
@@ -11,6 +15,8 @@ function Input() {
 
       <input
         type="text"
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
         placeholder="https://youtube.com/watch?v=..."
         className="
           w-full
@@ -29,7 +35,6 @@ function Input() {
           focus:ring-blue-500/30
         "
       />
-
     </div>
   );
 }
