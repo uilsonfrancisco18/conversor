@@ -1,0 +1,20 @@
+# Ambiente virtual
+venv/
+
+# Variaveis de ambiente
+.env
+
+# Cache Python
+__pycache__/
+*.pyc
+
+# Downloads
+downloads/
+
+# Build
+build/
+dist/
+
+# Testes
+.pytest_cache/
+.mypy_cache/
