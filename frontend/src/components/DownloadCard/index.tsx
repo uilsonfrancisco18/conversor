@@ -4,7 +4,7 @@ import QualitySelector from "./QualitySelector";
 import Button from "./Button";
 import Status from "./Status";
 import ProgressBar from "./ProgressBar";
-import { useDownload } from "../../hooks/useDownloadd";
+import { useDownload } from "../../hooks/useDownload.ts/useDownloadd";
 
 function DownloadCard() {
   const {

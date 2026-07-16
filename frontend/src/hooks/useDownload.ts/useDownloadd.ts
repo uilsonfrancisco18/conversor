@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { toast } from "sonner";
+import { downloadService } from "../../services/downloadService";
+import { getErrorMessage } from "../../utils/errorHandler";
+import { STATUS, type StatusType } from "../../constants/status";
 
 export function useDownload() {
   const [url, setUrl] = useState("");
@@ -8,18 +11,19 @@ export function useDownload() {
   const [loading, setLoading] = useState(false);
   const [mensagem, setMensagem] = useState("");
   const [progresso, setProgresso] = useState(0);
-  const [status, setStatus] = useState("idle");
+  const [status, setStatus] = useState<StatusType>(STATUS.IDLE);
 
   async function handleDownload() {
     if (!url) {
-      setStatus("error");
+      setStatus(STATUS.ERROR);
+      setMensagem("Digite uma URL para continuar");
       toast.warning("Digite uma URL para continuar");
       return;
     }
 
     try {
       setLoading(true);
-      setStatus("preparing");
+      setStatus(STATUS.PREPARING);
       setMensagem("");
 
       toast.info("Iniciando download...");
@@ -37,50 +41,37 @@ export function useDownload() {
         });
       }, 1000);
 
-      setStatus("downloading");
+      setStatus(STATUS.DOWNLOADING);
 
-      const response = await fetch(
-        "http://127.0.0.1:8000/download",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            url,
-            tipo,
-            qualidade,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Falha ao realizar download");
-      }
-
-      const data = await response.json();
+      const data = await downloadService({
+        url,
+        tipo,
+        qualidade,
+      });
 
       setMensagem(data.mensagem);
-      setStatus("success");
+      setStatus(STATUS.SUCCESS);
 
       toast.success(data.mensagem);
 
       setProgresso(100);
-
     } catch (error) {
       console.error(error);
 
-      setStatus("error");
+      setStatus(STATUS.ERROR);
 
-      toast.error("Erro ao realizar download");
+      const mensagemErro = getErrorMessage(error);
 
+      setMensagem(mensagemErro);
+
+      toast.error(mensagemErro);
     } finally {
       setLoading(false);
 
       setTimeout(() => {
         setMensagem("");
         setProgresso(0);
-        setStatus("idle");
+        setStatus(STATUS.IDLE);
       }, 1500);
     }
   }
