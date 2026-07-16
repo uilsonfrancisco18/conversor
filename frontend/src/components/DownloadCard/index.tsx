@@ -6,6 +6,7 @@ import QualitySelector from "./QualitySelector";
 import Button from "./Button";
 import Status from "./Status";
 import { useDownload } from "../../hooks/useDownloadd";
+import ProgressBar from "./ProgressBar";
 
 function DownloadCard() {
   const {
@@ -17,6 +18,7 @@ function DownloadCard() {
   setQualidade,
   loading,
   mensagem,
+  progresso,
   handleDownload,
 } = useDownload();
 
@@ -50,6 +52,8 @@ function DownloadCard() {
            onClick={handleDownload} 
           
           />
+          <ProgressBar progresso={progresso} />
+          
 
           <Status mensagem={mensagem} />
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 
 export function useDownload() {
   const [url, setUrl] = useState("");
@@ -6,17 +7,33 @@ export function useDownload() {
   const [qualidade, setQualidade] = useState("");
   const [loading, setLoading] = useState(false);
   const [mensagem, setMensagem] = useState("");
+  const [progresso, setProgresso] = useState(0);
+
 
   async function handleDownload() {
 
     if (!url) {
-      setMensagem("Digite uma URL para continuar");
+      toast.warning("Digite uma URL para continuar");
       return;
     }
 
     try {
       setLoading(true);
+      toast.info("Iniciando download...");
       setMensagem("");
+
+      setProgresso(10);
+
+const intervalo = setInterval(() => {
+  setProgresso((valor) => {
+    if (valor >= 90) {
+      clearInterval(intervalo);
+      return valor;
+    }
+
+    return valor + 10;
+  });
+ }, 1000);
 
       const response = await fetch(
         "http://127.0.0.1:8000/download",
@@ -37,12 +54,21 @@ export function useDownload() {
 
       setMensagem(data.mensagem);
 
+      toast.success(data.mensagem);
+
+      setProgresso(100);
+
     } catch (error) {
       console.error(error);
-      setMensagem("Erro ao realizar download");
+      toast.error("Erro ao realizar download");
 
     } finally {
       setLoading(false);
+
+      setTimeout(() => {
+        setMensagem("");
+        setProgresso(0);
+      }, 1500);
     }
   }
 
@@ -59,6 +85,9 @@ export function useDownload() {
     loading,
 
     mensagem,
+
+    progresso,
+    setProgresso,
 
     handleDownload,
   };
