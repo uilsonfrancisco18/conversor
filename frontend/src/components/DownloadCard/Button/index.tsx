@@ -1,14 +1,11 @@
-import { Download } from "lucide-react";
+import { Download, LoaderCircle } from "lucide-react";
 
 interface ButtonProps {
   loading: boolean;
   onClick: () => void;
 }
 
-function Button({
-  loading,
-  onClick,
-}: ButtonProps) {
+function Button({ loading, onClick }: ButtonProps) {
   return (
     <button
       onClick={onClick}
@@ -16,7 +13,9 @@ function Button({
       className="
         w-full
         rounded-xl
-        bg-blue-600
+        bg-gradient-to-r
+        from-blue-600
+        to-cyan-500
         py-4
         text-lg
         font-semibold
@@ -24,16 +23,26 @@ function Button({
         items-center
         justify-center
         gap-3
-        transition
-        hover:bg-blue-500
+        shadow-lg
+        transition-all
+        duration-300
+        hover:scale-[1.02]
+        hover:shadow-blue-500/30
+        active:scale-95
         disabled:opacity-60
         disabled:cursor-not-allowed
       "
     >
-      <Download size={22} />
+      {loading ? (
+        <LoaderCircle
+          size={22}
+          className="animate-spin"
+        />
+      ) : (
+        <Download size={22} />
+      )}
 
       {loading ? "Baixando..." : "Baixar Agora"}
-
     </button>
   );
 }

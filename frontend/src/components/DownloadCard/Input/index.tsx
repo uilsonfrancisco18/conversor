@@ -29,7 +29,9 @@ function Input({ url, setUrl }: InputProps) {
           text-white
           placeholder:text-slate-500
           outline-none
-          transition
+          transition-all
+          duration-300
+          hover:border-slate-500
           focus:border-blue-500
           focus:ring-2
           focus:ring-blue-500/30

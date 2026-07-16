@@ -8,32 +8,36 @@ export function useDownload() {
   const [loading, setLoading] = useState(false);
   const [mensagem, setMensagem] = useState("");
   const [progresso, setProgresso] = useState(0);
-
+  const [status, setStatus] = useState("idle");
 
   async function handleDownload() {
-
     if (!url) {
+      setStatus("error");
       toast.warning("Digite uma URL para continuar");
       return;
     }
 
     try {
       setLoading(true);
-      toast.info("Iniciando download...");
+      setStatus("preparing");
       setMensagem("");
+
+      toast.info("Iniciando download...");
 
       setProgresso(10);
 
-const intervalo = setInterval(() => {
-  setProgresso((valor) => {
-    if (valor >= 90) {
-      clearInterval(intervalo);
-      return valor;
-    }
+      const intervalo = setInterval(() => {
+        setProgresso((valor) => {
+          if (valor >= 90) {
+            clearInterval(intervalo);
+            return valor;
+          }
 
-    return valor + 10;
-  });
- }, 1000);
+          return valor + 10;
+        });
+      }, 1000);
+
+      setStatus("downloading");
 
       const response = await fetch(
         "http://127.0.0.1:8000/download",
@@ -50,9 +54,14 @@ const intervalo = setInterval(() => {
         }
       );
 
+      if (!response.ok) {
+        throw new Error("Falha ao realizar download");
+      }
+
       const data = await response.json();
 
       setMensagem(data.mensagem);
+      setStatus("success");
 
       toast.success(data.mensagem);
 
@@ -60,6 +69,9 @@ const intervalo = setInterval(() => {
 
     } catch (error) {
       console.error(error);
+
+      setStatus("error");
+
       toast.error("Erro ao realizar download");
 
     } finally {
@@ -68,6 +80,7 @@ const intervalo = setInterval(() => {
       setTimeout(() => {
         setMensagem("");
         setProgresso(0);
+        setStatus("idle");
       }, 1500);
     }
   }
@@ -88,6 +101,8 @@ const intervalo = setInterval(() => {
 
     progresso,
     setProgresso,
+
+    status,
 
     handleDownload,
   };

@@ -22,39 +22,77 @@ function TipoSelector({
   return (
     <div className="space-y-3">
       <label className="text-sm font-medium text-slate-300">
-        Tipo
+        Tipo do Download
       </label>
 
       <div className="space-y-3">
 
         <button
+          type="button"
           onClick={() => alterarTipo("video")}
-          className={`w-full rounded-xl border p-4 transition flex items-center justify-between ${
-            tipo === "video"
-              ? "border-blue-500 bg-blue-500/10"
-              : "border-slate-700 hover:border-slate-500"
-          }`}
+          className={`
+            w-full
+            rounded-xl
+            border
+            p-4
+            flex
+            items-center
+            justify-between
+            transition-all
+            duration-300
+            hover:scale-[1.02]
+            active:scale-95
+            ${
+              tipo === "video"
+                ? "border-blue-500 bg-blue-500/10 shadow-lg shadow-blue-500/20"
+                : "border-slate-700 bg-slate-950 hover:border-blue-400 hover:bg-slate-900"
+            }
+          `}
         >
           <div className="flex items-center gap-3">
-            <span>Vídeo</span>
-          </div>
+            <Video
+              size={20}
+              className={tipo === "video" ? "text-blue-500" : "text-slate-400"}
+            />
 
-          <Video className="text-blue-500" />
+            <span className="font-medium text-white">
+              Vídeo
+            </span>
+          </div>
         </button>
 
         <button
+          type="button"
           onClick={() => alterarTipo("mp3")}
-          className={`w-full rounded-xl border p-4 transition flex items-center justify-between ${
-            tipo === "mp3"
-              ? "border-blue-500 bg-blue-500/10"
-              : "border-slate-700 hover:border-slate-500"
-          }`}
+          className={`
+            w-full
+            rounded-xl
+            border
+            p-4
+            flex
+            items-center
+            justify-between
+            transition-all
+            duration-300
+            hover:scale-[1.02]
+            active:scale-95
+            ${
+              tipo === "mp3"
+                ? "border-blue-500 bg-blue-500/10 shadow-lg shadow-blue-500/20"
+                : "border-slate-700 bg-slate-950 hover:border-blue-400 hover:bg-slate-900"
+            }
+          `}
         >
           <div className="flex items-center gap-3">
-            <span>MP3</span>
-          </div>
+            <Music
+              size={20}
+              className={tipo === "mp3" ? "text-blue-500" : "text-slate-400"}
+            />
 
-          <Music className="text-blue-500" />
+            <span className="font-medium text-white">
+              MP3
+            </span>
+          </div>
         </button>
 
       </div>

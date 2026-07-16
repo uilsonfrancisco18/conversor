@@ -1,3 +1,5 @@
+import { SlidersHorizontal } from "lucide-react";
+
 type Props = {
   tipo: string;
   qualidade: string;
@@ -9,7 +11,6 @@ function QualitySelector({
   qualidade,
   setQualidade,
 }: Props) {
-
   const opcoesVideo = [
     "360p",
     "720p",
@@ -30,8 +31,11 @@ function QualitySelector({
 
   return (
     <div className="space-y-3">
-
-      <label className="text-sm font-medium text-slate-300">
+      <label className="flex items-center gap-2 text-sm font-medium text-slate-300">
+        <SlidersHorizontal
+          size={18}
+          className="text-blue-500"
+        />
         Qualidade
       </label>
 
@@ -48,7 +52,9 @@ function QualitySelector({
           py-4
           text-white
           outline-none
-          transition
+          transition-all
+          duration-300
+          hover:border-slate-500
           focus:border-blue-500
           focus:ring-2
           focus:ring-blue-500/30
@@ -66,9 +72,7 @@ function QualitySelector({
             {opcao}
           </option>
         ))}
-
       </select>
-
     </div>
   );
 }
