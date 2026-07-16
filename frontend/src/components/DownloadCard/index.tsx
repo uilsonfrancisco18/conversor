@@ -16,6 +16,7 @@ function DownloadCard() {
   qualidade,
   setQualidade,
   loading,
+  mensagem,
   handleDownload,
 } = useDownload();
 
@@ -50,7 +51,7 @@ function DownloadCard() {
           
           />
 
-          <Status />
+          <Status mensagem={mensagem} />
 
         </div>
 
