@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { downloadService } from "../../services/downloadService";
 import { getErrorMessage } from "../../utils/errorHandler";
 import { STATUS, type StatusType } from "../../constants/status";
+import { validateUrl } from "../../utils/validateUrl";
 
 export function useDownload() {
   const [url, setUrl] = useState("");
@@ -14,12 +15,19 @@ export function useDownload() {
   const [status, setStatus] = useState<StatusType>(STATUS.IDLE);
 
   async function handleDownload() {
-    if (!url) {
-      setStatus(STATUS.ERROR);
-      setMensagem("Digite uma URL para continuar");
-      toast.warning("Digite uma URL para continuar");
+    // Campo vazio
+    if (!url.trim()) {
+      toast.warning("Digite uma URL para continuar.");
       return;
     }
+
+    // URL inválida
+    if (!validateUrl(url)) {
+      toast.error("Informe uma URL válida.");
+      return;
+    }
+
+    let intervalo: ReturnType<typeof setInterval> | undefined;
 
     try {
       setLoading(true);
@@ -30,13 +38,9 @@ export function useDownload() {
 
       setProgresso(10);
 
-      const intervalo = setInterval(() => {
+      intervalo = setInterval(() => {
         setProgresso((valor) => {
-          if (valor >= 90) {
-            clearInterval(intervalo);
-            return valor;
-          }
-
+          if (valor >= 90) return valor;
           return valor + 10;
         });
       }, 1000);
@@ -49,13 +53,32 @@ export function useDownload() {
         qualidade,
       });
 
+      if (intervalo) {
+        clearInterval(intervalo);
+      }
+
+      setProgresso(100);
+
       setMensagem(data.mensagem);
       setStatus(STATUS.SUCCESS);
 
       toast.success(data.mensagem);
 
-      setProgresso(100);
+      // Libera o botão imediatamente
+      setLoading(false);
+
+      // Limpa o formulário após um pequeno atraso
+      setTimeout(() => {
+        setUrl("");
+        setTipo("video");
+        setQualidade("");
+      }, 500);
+
     } catch (error) {
+      if (intervalo) {
+        clearInterval(intervalo);
+      }
+
       console.error(error);
 
       setStatus(STATUS.ERROR);
@@ -65,13 +88,17 @@ export function useDownload() {
       setMensagem(mensagemErro);
 
       toast.error(mensagemErro);
-    } finally {
+
       setLoading(false);
 
+    } finally {
       setTimeout(() => {
         setMensagem("");
         setProgresso(0);
         setStatus(STATUS.IDLE);
+
+        //garente que o botão não fique travando
+        setLoading(false);
       }, 1500);
     }
   }
