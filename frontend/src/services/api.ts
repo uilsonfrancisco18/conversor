@@ -1,23 +1,11 @@
-import { API_BASE_URL } from "../constants/api";
+import { api } from "../constants/api";
 
-export async function api<T>(
-  endpoint: string,
-  options?: RequestInit
-): Promise<T> {
-  const response = await fetch(
-    `${API_BASE_URL}${endpoint}`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        ...(options?.headers ?? {}),
-      },
-      ...options,
-    }
-  );
+import type { DownloadRequest } from "../types/DownloadRequest";
+import type { DownloadResponse } from "../types/DownloadResponse";
 
-  if (!response.ok) {
-    throw new Error("Erro ao comunicar com a API.");
-  }
-
-  return response.json();
+export async function downloadService(
+  dados: DownloadRequest
+): Promise<DownloadResponse> {
+  const response = await api.post<DownloadResponse>("/download", dados);
+  return response.data;
 }
