@@ -15,16 +15,17 @@ export function useDownload() {
   const [status, setStatus] = useState<StatusType>(STATUS.IDLE);
 
   async function handleDownload() {
+
     // Campo vazio
     if (!url.trim()) {
       toast.warning("Digite uma URL para continuar.");
-      return;
+      return null;
     }
 
     // URL inválida
     if (!validateUrl(url)) {
       toast.error("Informe uma URL válida.");
-      return;
+      return null;
     }
 
     let intervalo: ReturnType<typeof setInterval> | undefined;
@@ -45,7 +46,9 @@ export function useDownload() {
         });
       }, 1000);
 
+
       setStatus(STATUS.DOWNLOADING);
+
 
       const data = await downloadService({
         url,
@@ -53,55 +56,72 @@ export function useDownload() {
         qualidade,
       });
 
+
       if (intervalo) {
         clearInterval(intervalo);
       }
 
+
       setProgresso(100);
 
       setMensagem(data.mensagem);
+
       setStatus(STATUS.SUCCESS);
 
       toast.success(data.mensagem);
 
+
       // Libera o botão imediatamente
       setLoading(false);
 
-      // Limpa o formulário após um pequeno atraso
+
+      // Limpa formulário
       setTimeout(() => {
         setUrl("");
         setTipo("video");
         setQualidade("");
       }, 500);
 
+
+      // Retorna os dados do backend
+      return data;
+
+
     } catch (error) {
+
       if (intervalo) {
         clearInterval(intervalo);
       }
 
+
       console.error(error);
+
 
       setStatus(STATUS.ERROR);
 
+
       const mensagemErro = getErrorMessage(error);
+
 
       setMensagem(mensagemErro);
 
+
       toast.error(mensagemErro);
+
 
       setLoading(false);
 
-    } finally {
-      setTimeout(() => {
-        setMensagem("");
-        setProgresso(0);
-        setStatus(STATUS.IDLE);
 
-        //garente que o botão não fique travando
-        setLoading(false);
-      }, 1500);
+      return null;
+
+
+    } finally {
+
+      setLoading(false);
+
     }
   }
+
 
   return {
     url,

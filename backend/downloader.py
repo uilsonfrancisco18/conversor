@@ -33,34 +33,52 @@ def baixar(url: str, tipo: str, qualidade: str):
         }
 
     else:
-        return "Tipo de download inválido."
+        return {
+            "mensagem": "Tipo de download inválido.",
+            "arquivo": None
+        }
 
     try:
         with YoutubeDL(opcoes) as ydl:
-            ydl.download([url])
+            info = ydl.extract_info(url, download=True)
 
-        return "Download concluído com sucesso!"
+        titulo = info.get("title", "Arquivo desconhecido")
+
+        extensao = "mp4" if tipo == "video" else "mp3"
+
+        nome_arquivo = f"{titulo}.{extensao}"
+
+        return {
+            "mensagem": "Download concluído com sucesso!",
+            "arquivo": nome_arquivo
+        }
 
     except Exception as e:
         erro = str(e).lower()
         print("ERRO:", erro)
 
         if "video unavailable" in erro:
-            return "Este vídeo não está disponível."
+            mensagem = "Este vídeo não está disponível."
 
         elif "private video" in erro:
-            return "Este vídeo é privado."
+            mensagem = "Este vídeo é privado."
 
         elif "unsupported url" in erro:
-            return "Este link não é suportado."
+            mensagem = "Este link não é suportado."
 
         elif "instagram" in erro:
-            return "Não foi possível baixar este conteúdo do Instagram."
+            mensagem = "Não foi possível baixar este conteúdo do Instagram."
 
         elif "sign in to confirm your age" in erro:
-            return "Este vídeo possui restrição de idade."
+            mensagem = "Este vídeo possui restrição de idade."
 
         elif "unable to extract" in erro:
-            return "Não foi possível processar este vídeo."
+            mensagem = "Não foi possível processar este vídeo."
 
-        return "Não foi possível concluir o download."
+        else:
+            mensagem = "Não foi possível concluir o download."
+
+        return {
+            "mensagem": mensagem,
+            "arquivo": None
+        }

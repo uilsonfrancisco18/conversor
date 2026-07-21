@@ -33,6 +33,4 @@ def download(dados: DownloadRequest):
         dados.qualidade
     )
 
-    return {
-        "mensagem": resultado
-    }
+    return resultado
