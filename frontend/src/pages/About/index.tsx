@@ -7,8 +7,9 @@ import {
   History,
   MonitorSmartphone,
   Code,
+  Mail,
 } from "lucide-react";
-import { FaInstagram, FaYoutube } from "react-icons/fa";
+import { FaGithub, FaInstagram, FaYoutube } from "react-icons/fa";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -212,6 +213,26 @@ function About() {
               Python e yt-dlp como parte do processo de aprendizado e
               aprimoramento em desenvolvimento Full Stack.
             </p>
+
+            <div className="mt-8 flex flex-col items-center justify-center gap-4 text-slate-300 sm:flex-row">
+              <a
+                href="https://github.com/uilsonfrancisco18/conversor"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 transition hover:text-blue-500"
+              >
+                <FaGithub size={20} />
+                GitHub
+              </a>
+
+              <a
+                href="mailto:uilsonfranisco20@gamil.com"
+                className="inline-flex items-center gap-2 transition hover:text-blue-500"
+              >
+                <Mail size={20} />
+                uilsonfranisco20@gamil.com
+              </a>
+            </div>
 
             <p className="mt-8 text-slate-500">
               © 2026 • DownPro
