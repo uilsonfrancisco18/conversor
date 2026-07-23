@@ -1,5 +1,5 @@
+import { useEffect } from "react";
 import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
 import DownloadCard from "../../components/DownloadCard";
 import Hero from "../../components/Hero";
 
@@ -16,13 +16,17 @@ function Home() {
 
 export default Home;*/
 function Home() {
+  useEffect(() => {
+    document.title = "DownPro";
+  }, []);
+
   return (
     <main className="min-h-screen bg-slate-950 text-white flex flex-col">
       <Navbar />
       <Hero />
       <DownloadCard />
-      <Footer />
     </main>
   );
-  }
-  export default Home;
+}
+
+export default Home;
