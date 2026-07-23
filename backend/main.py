@@ -5,8 +5,6 @@ from downloader import baixar
 
 app = FastAPI()
 
-
-# Permitir comunicação com o frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -18,20 +16,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 class DownloadRequest(BaseModel):
     url: str
     tipo: str
     qualidade: str
 
-
 @app.post("/download")
 def download(dados: DownloadRequest):
-
-    resultado = baixar(
+    return baixar(
         dados.url,
         dados.tipo,
         dados.qualidade
     )
-
-    return resultado
